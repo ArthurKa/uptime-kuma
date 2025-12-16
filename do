@@ -16,6 +16,10 @@ deployAll() {
   docker builder prune -f --keep-storage 3GB &&
   true
 }
+down() {
+  docker-compose --profile all down &&
+  true
+}
 
 # Run function with name provided in $1
 set +x
