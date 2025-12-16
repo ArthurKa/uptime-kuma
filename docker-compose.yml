@@ -1,14 +1,33 @@
 services:
-  uptime-kuma:
+  monitor:
     networks:
       - uptime-kuma
     image: louislam/uptime-kuma:2.0.2-slim
-    container_name: uptime-kuma
+    container_name: uptime-kuma_monitor
     restart: unless-stopped
     expose:
       - 3001
     volumes:
       - ./app-data:/app/data
+    profiles:
+      - all
+      - monitor
+
+  stats:
+    networks:
+      - uptime-kuma
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: stats
+    image: uptime-kuma_stats
+    container_name: uptime-kuma_stats
+    restart: unless-stopped
+    expose:
+      - 3000
+    profiles:
+      - all
+      - stats
 
 networks:
   uptime-kuma:

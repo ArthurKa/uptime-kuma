@@ -1,0 +1,22 @@
+{
+  "editor.rulers": [
+    120
+  ],
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "[dockerfile]": {
+    "editor.foldingStrategy": "indentation",
+    "editor.defaultFormatter": "ms-azuretools.vscode-containers"
+  },
+  "cSpell.words": [
+    "louislam"
+  ]
+}

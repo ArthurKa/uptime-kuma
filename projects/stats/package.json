@@ -1,0 +1,33 @@
+{
+  "name": "@repo/stats",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --ext js,jsx,ts,tsx --max-warnings=0 src .eslintrc.js",
+    "lint:fix": "npm run lint -- --fix",
+    "ts:noWatch": "tsc --noEmit -p tsconfig.json",
+    "ts": "npm run ts:noWatch -- --watch",
+    "_dev": "nodemon -w ../../.env -x \"tsx watch --clear-screen=false src/index.ts\"",
+    "dev": "concurrently -r \"npm run ts -- --preserveWatchOutput\" \"npm run _dev\"",
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@arthurka/ts-utils": "3.17.2",
+    "@repo/common": "1.0.0",
+    "cookie-parser": "1.4.7",
+    "cors": "2.8.5",
+    "express": "5.1.0",
+    "systeminformation": "5.27.13",
+    "tsx": "4.20.6"
+  },
+  "devDependencies": {
+    "@ngrok/ngrok": "1.5.1",
+    "@types/cookie-parser": "1.4.10",
+    "@types/cors": "2.8.19",
+    "@types/express": "5.0.5",
+    "@types/node": "22.15.3",
+    "concurrently": "8.2.2",
+    "nodemon": "3.1.10",
+    "typescript": "5.8.3"
+  }
+}
