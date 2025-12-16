@@ -1,16 +1,16 @@
 #!/bin/sh -e
 
 deployStats() {
-  docker compose --profile stats build &&
-  docker compose --profile stats up -d &&
+  docker-compose --profile stats build &&
+  docker-compose --profile stats up -d &&
   docker exec nginx-certbot nginx -s reload &&
   docker image prune -f &&
   docker builder prune -f --keep-storage 3GB &&
   true
 }
 deployAll() {
-  docker compose --profile all build &&
-  docker compose --profile all up -d &&
+  docker-compose --profile all build &&
+  docker-compose --profile all up -d &&
   docker exec nginx-certbot nginx -s reload &&
   docker image prune -f &&
   docker builder prune -f --keep-storage 3GB &&
