@@ -2,6 +2,12 @@ import { Brand, WITNESS } from '@arthurka/ts-utils';
 import { initializeByTypeGuard } from '../utils';
 import { isNonNegative, NonNegative } from './common';
 
+export type CPUPercentage = Brand<NonNegative, 'CPU'>;
+export const isCPUPercentage = (e: unknown): e is CPUPercentage => isNonNegative(e);
+export const CPUPercentage = (e: CPUPercentage[WITNESS]): CPUPercentage => (
+  initializeByTypeGuard(e, isCPUPercentage, 'CPUPercentage')
+);
+
 export type RAMUsage = Brand<NonNegative, 'RAM'>;
 export const isRAMUsage = (e: unknown): e is RAMUsage => isNonNegative(e);
 export const RAMUsage = (e: RAMUsage[WITNESS]): RAMUsage => (

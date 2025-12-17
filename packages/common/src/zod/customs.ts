@@ -1,7 +1,6 @@
 import { typeOf } from '@arthurka/ts-utils';
 import { z } from 'zod/v4';
-import { isCPUPercentage } from '../brands/number/Percentage';
-import { isDiskUsage, isRAMUsage } from '../brands';
+import { isCPUPercentage, isDiskUsage, isRAMUsage } from '../brands';
 
 const makeCustomErrorMessage = (name: string) => ({
   error({ input }: { input: unknown }) {

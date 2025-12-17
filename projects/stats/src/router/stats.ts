@@ -1,15 +1,23 @@
 import { Express } from 'express';
 import { routes } from '@repo/common/src/zod';
 import si from 'systeminformation';
-import { round } from '@arthurka/ts-utils';
+import os from 'os';
+import { getNotUndefined, round } from '@arthurka/ts-utils';
 import { CPUPercentage, DiskUsage, RAMUsage } from '@repo/common/src/brands';
+import assert from 'assert';
 import { urls } from '../urls';
 
-const getCPU = async () => {
-  const { avgLoad } = await si.currentLoad();
+const getCPU = () => (
+  new Promise<CPUPercentage>(res => {
+    process.nextTick(() => {
+      const avgFor1Min = getNotUndefined(os.loadavg()[0], 'This should never happen. |kkn3zd|');
+      const { length } = os.cpus();
+      assert(length > 0, 'Something went wrong. |8118t6|');
 
-  return CPUPercentage(round(avgLoad, 2));
-};
+      res(CPUPercentage(round(avgFor1Min * 100 / length, 2)));
+    });
+  })
+);
 const getRAM = async () => {
   const { available } = await si.mem();
 
