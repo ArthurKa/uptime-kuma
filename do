@@ -1,24 +1,26 @@
-#!/bin/sh -e
+#!/bin/bash
+
+shopt -s expand_aliases
+source ~/.bashrc
+source <(grep '^alias ' ~/.bashrc)
+set -e
 
 deployStats() {
-  docker-compose --profile stats build &&
-  docker-compose --profile stats up -d &&
-  docker exec nginx-certbot nginx -s reload &&
-  docker image prune -f &&
-  docker builder prune -f --keep-storage 3GB &&
-  true
+  dc --profile stats build
+  dc --profile stats up -d
+  docker exec nginx-certbot nginx -s reload
+  docker image prune -f
+  docker builder prune -f --keep-storage 3GB
 }
 deployAll() {
-  docker-compose --profile all build &&
-  docker-compose --profile all up -d &&
-  docker exec nginx-certbot nginx -s reload &&
-  docker image prune -f &&
-  docker builder prune -f --keep-storage 3GB &&
-  true
+  dc --profile all build
+  dc --profile all up -d
+  docker exec nginx-certbot nginx -s reload
+  docker image prune -f
+  docker builder prune -f --keep-storage 3GB
 }
 down() {
-  docker-compose --profile all down &&
-  true
+  dc --profile all down
 }
 
 # Run function with name provided in $1
