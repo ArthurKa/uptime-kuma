@@ -22,7 +22,7 @@ COPY projects/stats/package.json projects/stats/
 RUN node helpers/make-docker-package-jsons.js
 
 
-FROM scratch as help-files
+FROM scratch AS help-files
 WORKDIR /app
 
 COPY --from=help-files_stats /app/package-lock.json package-lock-stats.json
