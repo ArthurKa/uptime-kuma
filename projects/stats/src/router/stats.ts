@@ -1,11 +1,21 @@
 import { Express } from 'express';
+import { NODE_ENV } from '@repo/common/src/envVariables/public';
 import { routes } from '@repo/common/src/zod';
 import si from 'systeminformation';
 import os from 'os';
-import { getNotUndefined, round } from '@arthurka/ts-utils';
-import { CPUPercentage, DiskUsage, RAMUsage } from '@repo/common/src/brands';
+import { getNotUndefined, isArrayLength, round } from '@arthurka/ts-utils';
+import { CPUPercentage, DiskUsage, FileSizeGB, RAMUsage } from '@repo/common/src/brands';
 import assert from 'assert';
+import { exec } from 'child_process';
 import { urls } from '../urls';
+
+const execAsync = (path: string) => (
+  new Promise<string>(res => {
+    exec(path, (error, stdout) => {
+      res(stdout);
+    });
+  })
+);
 
 const getCPU = () => (
   new Promise<CPUPercentage>(res => {
@@ -30,13 +40,32 @@ const getDisks = async () => {
     DiskUsage(round(e.available / 1024 ** 3, 2))
   ));
 };
+const getMaxLogsSize = async (): Promise<FileSizeGB> => {
+  const dockerContainersFolder = NODE_ENV === 'development' ? '../../max-logs-size-test-folder' : '/docker-containers-volume';
+  const [localFileLogs, jsonFileLogs] = await Promise.all([
+    execAsync(`ls -lAF ${dockerContainersFolder}/*/local-logs`),
+    execAsync(`ls -lAF ${dockerContainersFolder}/*/*-json.log`),
+  ]);
+
+  const sizes = [
+    ...[...localFileLogs.matchAll(/total (\d+)\n/g)].map(e => (
+      FileSizeGB(round(+getNotUndefined(e[1], 'This should never happen. |x3q62y|') / 1000 ** 2, 2))
+    )),
+    ...jsonFileLogs.trim().split('\n').filter(e => e !== '').map(e => (
+      FileSizeGB(round(+getNotUndefined(e.split(/\s+/)[4], 'This should never happen. |iz6rza|') / 1024 ** 3, 2))
+    )),
+  ];
+
+  return !isArrayLength(sizes, '>', 0) ? FileSizeGB(0) : Math.max(...sizes);
+};
 
 export const mountStats = (app: Express) => {
   app.get<unknown, routes.stats._.RouteResponse>(urls.stats._, async (req, res) => {
-    const [cpu, ram, disks] = await Promise.all([
+    const [cpu, ram, disks, maxLogsSize] = await Promise.all([
       getCPU(),
       getRAM(),
       getDisks(),
+      getMaxLogsSize(),
     ]);
 
     res.json({
@@ -45,6 +74,7 @@ export const mountStats = (app: Express) => {
         cpu,
         ram,
         disks,
+        maxLogsSize,
       },
     });
   });
@@ -67,6 +97,13 @@ export const mountStats = (app: Express) => {
     res.json({
       success: true,
       data: await getDisks(),
+    });
+  });
+
+  app.get<unknown, routes.stats.maxLogsSize.RouteResponse>(urls.stats.maxLogsSize, async (req, res) => {
+    res.json({
+      success: true,
+      data: await getMaxLogsSize(),
     });
   });
 };

@@ -7,7 +7,7 @@
     "lint:fix": "npm run lint -- --fix",
     "ts:noWatch": "tsc --noEmit -p tsconfig.json",
     "ts": "npm run ts:noWatch -- --watch",
-    "_dev": "nodemon -w ../../.env -x \"tsx watch --clear-screen=false src/index.ts\"",
+    "_dev": "nodemon -w ../../.env -x \"dotenv -e ../../.env -- tsx watch --clear-screen=false src/index.ts\"",
     "dev": "concurrently -r \"npm run ts -- --preserveWatchOutput\" \"npm run _dev\"",
     "start": "tsx src/index.ts"
   },
@@ -27,6 +27,7 @@
     "@types/express": "5.0.5",
     "@types/node": "22.15.3",
     "concurrently": "8.2.2",
+    "dotenv-cli": "7.4.2",
     "nodemon": "3.1.10",
     "typescript": "5.8.3"
   }

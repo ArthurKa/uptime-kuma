@@ -10,5 +10,8 @@ export const urls = {
     get disks() {
       return `${this._}/disks` as const;
     },
+    get maxLogsSize() {
+      return `${this._}/max-logs-size` as const;
+    },
   },
 } as const;

@@ -1,5 +1,5 @@
 services:
-  monitor:
+  monitor: &monitor
     networks:
       - uptime-kuma
     image: louislam/uptime-kuma:2.0.2-slim
@@ -10,8 +10,15 @@ services:
     volumes:
       - ./app-data:/app/data
     profiles:
-      - all
+      - prod
       - monitor
+
+  monitor-dev:
+    <<: *monitor
+    ports:
+      - 3001:3001
+    profiles:
+      - dev
 
   stats:
     networks:
@@ -22,12 +29,15 @@ services:
       target: stats
     image: uptime-kuma_stats
     container_name: uptime-kuma_stats
+    env_file: .env
     restart: unless-stopped
     expose:
       - 3000
     profiles:
-      - all
+      - prod
       - stats
+    volumes:
+      - /var/lib/docker/containers:/docker-containers-volume:ro
 
 networks:
   uptime-kuma:

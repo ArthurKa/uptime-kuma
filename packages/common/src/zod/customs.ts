@@ -1,6 +1,6 @@
 import { typeOf } from '@arthurka/ts-utils';
 import { z } from 'zod/v4';
-import { isCPUPercentage, isDiskUsage, isRAMUsage } from '../brands';
+import { isCPUPercentage, isDiskUsage, isFileSizeGB, isRAMUsage } from '../brands';
 
 const makeCustomErrorMessage = (name: string) => ({
   error({ input }: { input: unknown }) {
@@ -11,3 +11,4 @@ const makeCustomErrorMessage = (name: string) => ({
 export const customCPUPercentage = z.custom(isCPUPercentage, makeCustomErrorMessage('CPUPercentage'));
 export const customRAMUsage = z.custom(isRAMUsage, makeCustomErrorMessage('RAMUsage'));
 export const customDiskUsage = z.custom(isDiskUsage, makeCustomErrorMessage('DiskUsage'));
+export const customFileSizeGB = z.custom(isFileSizeGB, makeCustomErrorMessage('FileSizeGB'));

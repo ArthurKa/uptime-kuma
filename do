@@ -13,14 +13,14 @@ deployStats() {
   docker builder prune -f --keep-storage 3GB
 }
 deployAll() {
-  dc --profile all build
-  dc --profile all up -d
+  dc --profile prod build
+  dc --profile prod up -d
   docker exec nginx-certbot nginx -s reload
   docker image prune -f
   docker builder prune -f --keep-storage 3GB
 }
 down() {
-  dc --profile all down
+  dc --profile prod down
 }
 
 # Run function with name provided in $1
