@@ -12,8 +12,8 @@ const mode = process.argv[2] === '--clean-up' ? 'remove' : 'create';
   @typedef Packages
   @type {
     | import('../package.json')
-    | import('../packages/common/package.json')
-    | import('../projects/stats/package.json')
+    | import('../libs/common/package.json')
+    | import('../apps/stats/package.json')
   }
 
   @typedef Package
